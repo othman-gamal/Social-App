@@ -9,29 +9,68 @@ import ProtectedPath from "./ProtectedRoutes/ProtectedPath";
 import ProtectedAuth from "./ProtectedRoutes/ProtectedAuth";
 
 function App() {
-
   const router = createBrowserRouter([
     {
       path: "",
-      element: <ProtectedPath><Mainlayout /></ProtectedPath>,
+      element: (
+        <ProtectedPath>
+          <Mainlayout />
+        </ProtectedPath>
+      ),
       children: [
-        { index: true, element: <ProtectedPath> <Newsfeed /> </ProtectedPath>},
-        { path: "*", element:   <ProtectedPath> <Notfound /></ProtectedPath> },
+        {
+          index: true,
+          element: (
+            <ProtectedPath>
+              {" "}
+              <Newsfeed />{" "}
+            </ProtectedPath>
+          ),
+        },
+        {
+          path: "*",
+          element: (
+            <ProtectedPath>
+              {" "}
+              <Notfound />
+            </ProtectedPath>
+          ),
+        },
       ],
     },
     {
       path: "",
-      element: <ProtectedAuth><Authlayout /></ProtectedAuth>,
+      element: (
+        <ProtectedAuth>
+          <Authlayout />
+        </ProtectedAuth>
+      ),
       children: [
-        { path: "register", element: <ProtectedAuth> <Register /></ProtectedAuth> },
-        { path: "login", element:    <ProtectedAuth> <Login /></ProtectedAuth> },
+        {
+          path: "register",
+          element: (
+            <ProtectedPath>
+              {" "}
+              <Register />
+            </ProtectedPath>
+          ),
+        },
+        {
+          path: "login",
+          element: (
+            <ProtectedAuth>
+              {" "}
+              <Login />
+            </ProtectedAuth>
+          ),
+        },
       ],
     },
   ]);
 
   return (
     <>
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </>
   );
 }

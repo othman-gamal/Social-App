@@ -10,40 +10,37 @@ import {
   Dropdown,
   DropdownMenu,
   Avatar,
+  Badge,
 } from "@heroui/react";
 
-import { Search } from 'lucide-react';
+import { RiMessage2Fill } from "react-icons/ri";
+import { IoIosNotifications } from "react-icons/io";
+
+import Navlogo from "../../src/assets/img1.jpeg";
+
+import { Search } from "lucide-react";
+import { useContext } from "react";
+import { authContext } from "../context/AuthContext";
 
 export default function MyNav() {
+  const { token, setToken } = useContext(authContext);
+
+  function logoutUser() {
+    localStorage.removeItem("userToken");
+    setToken(false);
+  }
   return (
-    <Navbar isBordered>
+    <Navbar isBordered maxWidth="full" className="px-16">
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
-          <p className="hidden sm:block font-bold text-inherit">ACME</p>
+          <img src={Navlogo} width={40} alt="logo" />
+          <span className="font-bold ms-5">NEXIFY</span>
         </NavbarBrand>
-        <NavbarContent className="hidden sm:flex gap-3">
-          <NavbarItem>
-            <Link color="foreground" href="#">
-              Features
-            </Link>
-          </NavbarItem>
-          <NavbarItem isActive>
-            <Link aria-current="page" color="secondary" href="#">
-              Customers
-            </Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link color="foreground" href="#">
-              Integrations
-            </Link>
-          </NavbarItem>
-        </NavbarContent>
       </NavbarContent>
-
-      <NavbarContent as="div" className="items-center" justify="end">
+      <NavbarBrand>
         <Input
           classNames={{
-            base: "max-w-full sm:max-w-[10rem] h-10",
+            base: "max-w-full  h-10",
             mainWrapper: "h-full",
             input: "text-small",
             inputWrapper:
@@ -51,11 +48,27 @@ export default function MyNav() {
           }}
           placeholder="Type to search..."
           size="sm"
+          radius="full"
           startContent={<Search />}
           type="search"
         />
+      </NavbarBrand>
+      <NavbarContent as="div" className="items-center" justify="end">
+        <NavbarBrand>
+          <NavbarItem className="bg-gray-200 size-10 flex justify-center items-center rounded-full m-5">
+            <Badge color="danger" content="5">
+              <RiMessage2Fill className="text-4xl" />
+            </Badge>
+          </NavbarItem>
+          <NavbarItem className="bg-gray-200 size-10 flex justify-center items-center rounded-full">
+            <Badge color="danger" content="5">
+              <IoIosNotifications className="text-4xl" />
+            </Badge>
+          </NavbarItem>
+        </NavbarBrand>
+
         <Dropdown placement="bottom-end">
-          <DropdownTrigger>
+          <DropdownTrigger className="cursor-pointer">
             <Avatar
               isBordered
               as="button"
@@ -71,18 +84,17 @@ export default function MyNav() {
               <p className="font-semibold">Signed in as</p>
               <p className="font-semibold">zoey@example.com</p>
             </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
-            <DropdownItem key="analytics">Analytics</DropdownItem>
-            <DropdownItem key="system">System</DropdownItem>
-            <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem key="logout" color="danger">
+            <DropdownItem key="settings">My Profile</DropdownItem>
+            <DropdownItem
+              key="logout"
+              color="danger"
+              onClick={() => logoutUser()}
+            >
               Log Out
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
     </Navbar>
-  )
+  );
 }
