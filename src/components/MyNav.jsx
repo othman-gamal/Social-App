@@ -3,7 +3,6 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
   Input,
   DropdownItem,
   DropdownTrigger,
@@ -15,6 +14,8 @@ import {
 
 import { RiMessage2Fill } from "react-icons/ri";
 import { IoIosNotifications } from "react-icons/io";
+
+import { Link } from "react-router-dom";
 
 import Navlogo from "../../src/assets/img1.jpeg";
 
@@ -32,10 +33,12 @@ export default function MyNav() {
   return (
     <Navbar isBordered maxWidth="full" className="px-16">
       <NavbarContent justify="start">
-        <NavbarBrand className="mr-4">
-          <img src={Navlogo} width={40} alt="logo" />
-          <span className="font-bold ms-5">NEXIFY</span>
-        </NavbarBrand>
+        <Link to={"/home"}>
+          <NavbarBrand className="mr-4">
+            <img src={Navlogo} width={40} alt="logo" />
+            <span className="font-bold ms-5">NEXIFY</span>
+          </NavbarBrand>
+        </Link>
       </NavbarContent>
       <NavbarBrand>
         <Input

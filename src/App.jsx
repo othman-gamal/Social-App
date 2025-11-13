@@ -7,6 +7,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ProtectedPath from "./ProtectedRoutes/ProtectedPath";
 import ProtectedAuth from "./ProtectedRoutes/ProtectedAuth";
+import PostDetails from "./pages/PostDetails";
+import CreatePostModal from "./pages/CreatePostModal";
 
 function App() {
   const router = createBrowserRouter([
@@ -24,6 +26,24 @@ function App() {
             <ProtectedPath>
               {" "}
               <Newsfeed />{" "}
+            </ProtectedPath>
+          ),
+        },
+        {
+          path: "/post-details/:id",
+          element: (
+            <ProtectedPath>
+              {" "}
+              <PostDetails />
+            </ProtectedPath>
+          ),
+        },
+        {
+          path: "/createpost",
+          element: (
+            <ProtectedPath>
+              {" "}
+              <CreatePostModal />
             </ProtectedPath>
           ),
         },
