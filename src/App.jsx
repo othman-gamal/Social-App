@@ -38,15 +38,7 @@ function App() {
             </ProtectedPath>
           ),
         },
-        {
-          path: "/createpost",
-          element: (
-            <ProtectedPath>
-              {" "}
-              <CreatePostModal />
-            </ProtectedPath>
-          ),
-        },
+
         {
           path: "*",
           element: (
@@ -69,10 +61,10 @@ function App() {
         {
           path: "register",
           element: (
-            <ProtectedPath>
+            <>
               {" "}
               <Register />
-            </ProtectedPath>
+            </>
           ),
         },
         {

@@ -32,3 +32,15 @@ export async function loginUser(FormData) {
     throw error; // keep throwing so Login.jsx can handle it
   }
 }
+
+export async function getLoggedUserData() {
+  const data = await axios.get(
+    `https://linked-posts.routemisr.com/users/profile-data`,
+    {
+      headers: {
+        token: localStorage.getItem("userToken"),
+      },
+    }
+  );
+  return data;
+}

@@ -24,11 +24,11 @@ export default function Newsfeed() {
       <main className="min-h-screen bg-gray-200">
         <div className="container p-5">
           <div className="grid grid-cols-4 gap-3">
-            <div className="col-span-1">
+            <div className="col-span-1 sticky top-12 h-screen overflow-y-auto">
               <Sidebar />
             </div>
             <div className="col-span-2 space-y-5">
-              <CreatePost />
+              <CreatePost getallposts={getPosts} />
               {posts.length == 0 ? (
                 [...Array(5)].map((skeleton, index) => (
                   <PostSkeleton key={index} />
@@ -36,7 +36,13 @@ export default function Newsfeed() {
               ) : (
                 <>
                   {posts &&
-                    posts.map((post) => <PostCard key={post.id} post={post} />)}
+                    posts.map((post) => (
+                      <PostCard
+                        getallposts={getPosts}
+                        key={post.id}
+                        post={post}
+                      />
+                    ))}
                 </>
               )}
             </div>

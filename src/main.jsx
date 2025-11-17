@@ -5,13 +5,16 @@ import "./index.css";
 import App from "./App.jsx";
 import { ToastContainer } from "react-toastify";
 import AuthContextProvider from "./context/AuthContext.jsx";
+import UserContextProvider from "./context/UserContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <HeroUIProvider>
       <AuthContextProvider>
+        {/* <UserContextProvider> */}
         <ToastContainer position="top-right" autoClose={5000} />
         <App />
+        {/* </UserContextProvider> */}
       </AuthContextProvider>
     </HeroUIProvider>
   </StrictMode>

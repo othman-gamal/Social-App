@@ -5,6 +5,10 @@ export async function getAllPosts() {
     headers: {
       token: localStorage.getItem("userToken"),
     },
+    params: {
+      limit: 50,
+      sort: "-createdAt",
+    },
   });
   return data;
 }
@@ -26,7 +30,7 @@ export async function getSinglePost(id) {
 
 export async function getUserPost({ id }) {
   const data = await axios.get(
-    `https://linked-posts.routemisr.com/users/${id}/posts?limit=2`,
+    `https://linked-posts.routemisr.com/users/profile-data`,
     {
       headers: {
         token: localStorage.getItem("userToken"),
@@ -55,4 +59,37 @@ export async function createPost(formData) {
     console.error("Error creating post:", error);
     throw error;
   }
+}
+
+//edit post
+export async function updatePost(postId, formData) {
+  try {
+    const data = await axios.put(
+      `https://linked-posts.routemisr.com/posts/${postId}`,
+      formData,
+      {
+        headers: {
+          token: localStorage.getItem("userToken"),
+          // Do NOT set Content-Type, browser will set it automatically for FormData
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
+}
+
+//delete
+export async function DeletePost(id) {
+  const data = await axios.delete(
+    `https://linked-posts.routemisr.com/posts/${id}`,
+    {
+      headers: {
+        token: localStorage.getItem("userToken"),
+      },
+    }
+  );
+  return data;
 }

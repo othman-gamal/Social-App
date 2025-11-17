@@ -36,3 +36,16 @@ export async function DeleteComment(id) {
   );
   return data;
 }
+
+export async function editComment(id, comment) {
+  const data = await axios.put(
+    `https://linked-posts.routemisr.com/comments/${id}`,
+    comment,
+    {
+      headers: {
+        token: localStorage.getItem("userToken"),
+      },
+    }
+  );
+  return data;
+}

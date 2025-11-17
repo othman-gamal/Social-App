@@ -1,110 +1,127 @@
-import { Card, Input, Textarea, Button, Divider } from "@heroui/react";
-import { useNavigate } from "react-router-dom";
-
-export default function CreatePostModal() {
-  const navigate = useNavigate();
-
-  const handleClose = () => {
-    navigate(-1); // go back to previous page
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      {/* Modal Card */}
-      <Card className="w-full max-w-md p-6 relative">
-        {/* Close Button */}
-        <button
-          onClick={handleClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 font-bold"
-        >
-          X
-        </button>
-
-        {/* Header */}
-        <h2 className="text-2xl font-bold text-center mb-4">Create a Post</h2>
-
-        <Divider />
-
-        {/* Body */}
-        <div className="space-y-4 mt-4">
-          <Input type="text" placeholder="Post title" />
-          <Textarea placeholder="What's on your mind?" rows={5} />
-        </div>
-
-        {/* Footer */}
-        <div className="flex justify-end mt-4 gap-2">
-          <Button color="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button color="primary">Post</Button>
-        </div>
-      </Card>
-    </div>
-  );
-}
-/* 
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Textarea,
+  Divider,
+} from "@heroui/react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Modal, Button, Textarea, Input, Alert } from "@heroui/react";
-import { toast } from "react-toastify";
-import { createPost } from "../services/PostServices";
+import { useRef } from "react";
+import { HiPhoto } from "react-icons/hi2";
+import { createPost, updatePost } from "../services/postServices";
 
-export default function CreatePostModal() {
-  const navigate = useNavigate();
-  const [text, setText] = useState("");
-  const [file, setFile] = useState(null);
-  const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export default function CreatePostModal({
+  post,
+  isOpen,
+  onOpenChange,
+  callBack,
+}) {
+  const [selectedPhoto, setSelectedPhoto] = useState(post?.image || "");
+  const [formDataImage, setFormDataImage] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
-  async function handleSubmit() {
-    setError("");
-    setIsSubmitting(true);
+  const fileInput = useRef();
+  const PostMsg = useRef();
 
+  function getFileInput() {
+    fileInput.current.click();
+  }
+  function getFile() {
+    const file = fileInput.current.files[0];
+    setFormDataImage(file);
+    setSelectedPhoto(URL.createObjectURL(file));
+  }
+
+  async function editPost() {
+    const formData = new FormData();
+    formData.append("body", PostMsg.current.value || " ");
+    if (formDataImage) {
+      formData.append("image", formDataImage);
+    }
+    setIsLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("You must be logged in");
-
-      const formData = new FormData();
-      formData.append("text", text);
-      if (file) formData.append("image", file);
-
-      await createPost(formData, token);
-      toast.success("Post created successfully!");
-      navigate("/"); // go back to newsfeed
-    } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.error || err.message);
-      toast.error(err.response?.data?.error || err.message);
+      if (post) {
+        const { data } = await updatePost(post._id, formData);
+        console.log(data);
+      } else {
+        const { data } = await createPost(formData);
+        console.log(data);
+      }
+      onOpenChange(false);
+      callBack();
+    } catch (error) {
+      console.log(error);
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   }
 
   return (
-    <Modal isOpen={true} onClose={() => navigate("/")}>
-      <h2 className="text-xl font-bold mb-2">Create Post</h2>
+    <>
+      <Modal
+        size="2xl"
+        isOpen={isOpen}
+        placement="top-center"
+        onOpenChange={() => {
+          onOpenChange(false);
+          if (!post) {
+            setFormDataImage("");
+          }
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 justify-center items-center">
+                {post ? "Update" : "Create"} Post
+              </ModalHeader>
+              <Divider />
+              <ModalBody className="p-4">
+                <Textarea
+                  defaultValue={post?.body || ""}
+                  ref={PostMsg}
+                  minRows={`${selectedPhoto ? "" : 50}`}
+                  placeholder="What's in your mind, Demb?"
+                />
+                {selectedPhoto && (
+                  <img src={selectedPhoto} alt="user's Selected Photo" />
+                )}
+                <Divider />
+                <div className="flex items-center gap-2 p-4">
+                  <span className="font-semibold">
+                    Add to Your Post {post ? "Updates" : ""}:
+                  </span>
+                  <span>
+                    <HiPhoto
+                      onClick={getFileInput}
+                      className="text-2xl cursor-pointer text-green-600"
+                    />
+                  </span>
+                  <input
+                    ref={fileInput}
+                    onChange={getFile}
+                    type="file"
+                    className="hidden"
+                  />
+                </div>
+              </ModalBody>
 
-      {error && <Alert color="danger" title={error} />}
-
-      <Textarea
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Write something..."
-        className="mb-2"
-      />
-
-      <Input type="file" onChange={(e) => setFile(e.target.files[0])} />
-
-      <div className="flex justify-end gap-2 mt-3">
-        <Button color="secondary" onClick={() => navigate("/")}>
-          Cancel
-        </Button>
-        <Button color="primary" onClick={handleSubmit} isLoading={isSubmitting}>
-          Submit
-        </Button>
-      </div>
-    </Modal>
+              <Button
+                isLoading={isLoading}
+                onPress={editPost}
+                className="m-4"
+                color="primary"
+              >
+                {post ? "Update" : "Post"}
+              </Button>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
-
-*/
+//backdrop="opaque"
