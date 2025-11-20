@@ -3,15 +3,15 @@ import PostBody from "../../Post/PostBody";
 import PostFooter from "../../Post/PostFooter";
 
 import { useState } from "react";
+import CommentInput from "../../Post/CommentInput";
 
-export default function PostCard({ post, getallposts }) {
+export default function PostCard({ post }) {
   const [postComments, setPostComments] = useState(post.comments || []);
   const postId = post._id;
 
   return (
     <div className=" bg-white rounded-lg shadow-sm border border-gray-200">
       <PostHeader
-        getallposts={getallposts}
         post={post}
         PostUserId={post.user._id}
         photo={post.user.photo}
@@ -20,6 +20,13 @@ export default function PostCard({ post, getallposts }) {
       />
 
       <PostBody
+        post={post}
+        id={postId}
+        body={post.body}
+        image={post.image}
+        setPostComments={setPostComments}
+      />
+      <CommentInput
         post={post}
         id={postId}
         body={post.body}

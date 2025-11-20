@@ -28,7 +28,7 @@ export async function getSinglePost(id) {
 
 //3 get user post
 
-export async function getUserPost({ id }) {
+export async function getUserPosts({ id }) {
   const data = await axios.get(
     `https://linked-posts.routemisr.com/users/profile-data`,
     {

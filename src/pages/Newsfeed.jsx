@@ -5,19 +5,14 @@ import { getAllPosts } from "../services/postServices";
 import { useState } from "react";
 import PostSkeleton from "../components/Skeletons/PostSkeleton";
 import CreatePost from "../components/Components/CreatePost";
-import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Newsfeed() {
-  const [posts, setPosts] = useState([]);
-  const navigate = useNavigate();
-  async function getPosts() {
-    const { data } = await getAllPosts();
-    setPosts(data?.posts);
-  }
-
-  useEffect(() => {
-    getPosts();
-  }, []);
+  const { data: posts, isLoading } = useQuery({
+    queryKey: ["getPosts"],
+    queryFn: () => getAllPosts(),
+    select: (data) => data?.data.posts,
+  });
 
   return (
     <>
@@ -28,21 +23,15 @@ export default function Newsfeed() {
               <Sidebar />
             </div>
             <div className="col-span-2 space-y-5">
-              <CreatePost getallposts={getPosts} />
-              {posts.length == 0 ? (
+              <CreatePost />
+              {isLoading ? (
                 [...Array(5)].map((skeleton, index) => (
                   <PostSkeleton key={index} />
                 ))
               ) : (
                 <>
                   {posts &&
-                    posts.map((post) => (
-                      <PostCard
-                        getallposts={getPosts}
-                        key={post.id}
-                        post={post}
-                      />
-                    ))}
+                    posts.map((post) => <PostCard key={post.id} post={post} />)}
                 </>
               )}
             </div>

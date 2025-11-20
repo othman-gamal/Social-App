@@ -12,6 +12,7 @@ import { useState } from "react";
 import { useRef } from "react";
 import { HiPhoto } from "react-icons/hi2";
 import { createPost, updatePost } from "../services/postServices";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function CreatePostModal({
   post,
@@ -22,6 +23,8 @@ export default function CreatePostModal({
   const [selectedPhoto, setSelectedPhoto] = useState(post?.image || "");
   const [formDataImage, setFormDataImage] = useState();
   const [isLoading, setIsLoading] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const fileInput = useRef();
   const PostMsg = useRef();
@@ -51,7 +54,8 @@ export default function CreatePostModal({
         console.log(data);
       }
       onOpenChange(false);
-      callBack();
+      queryClient.invalidateQueries(["getPosts"]);
+      // callBack();
     } catch (error) {
       console.log(error);
     } finally {

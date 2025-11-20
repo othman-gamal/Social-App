@@ -6,7 +6,7 @@ import { HiPhoto } from "react-icons/hi2";
 import { IoIosHappy } from "react-icons/io";
 import CreatePostModal from "../../pages/CreatePostModal";
 
-export default function CreatePost(getallposts) {
+export default function CreatePost() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
@@ -62,11 +62,7 @@ export default function CreatePost(getallposts) {
         </div>
       </Card>
       {isOpen && (
-        <CreatePostModal
-          callBack={getallposts}
-          onOpenChange={onOpenChange}
-          isOpen={isOpen}
-        />
+        <CreatePostModal onOpenChange={onOpenChange} isOpen={isOpen} />
       )}
     </>
   );

@@ -10,23 +10,25 @@ import { BsThreeDotsVertical, BsEmojiSmile } from "react-icons/bs";
 import { authContext } from "../../context/AuthContext";
 import CreatePostModal from "../../pages/CreatePostModal";
 import { useState } from "react";
-import { DeletePost, getAllPosts } from "../../services/postServices";
+import { DeletePost } from "../../services/postServices";
+import { useQueryClient } from "@tanstack/react-query";
 
-function PostHeader({ post, photo, name, date, PostUserId, getallposts }) {
+function PostHeader({ post, photo, name, date, PostUserId }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { userData } = useContext(authContext);
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   async function deleteUserPost(postId) {
     setIsLoading(true);
     try {
       const { data } = await DeletePost(postId);
+      queryClient.invalidateQueries(["getPosts"]);
       console.log(data);
     } catch (error) {
       console.log(error);
     } finally {
       setIsLoading(false);
-      getAllPosts();
     }
   }
 
@@ -73,7 +75,6 @@ function PostHeader({ post, photo, name, date, PostUserId, getallposts }) {
       {isOpen && (
         <CreatePostModal
           post={post}
-          callBack={getallposts}
           onOpenChange={onOpenChange}
           isOpen={isOpen}
         />

@@ -37,10 +37,10 @@ export async function DeleteComment(id) {
   return data;
 }
 
-export async function editComment(id, comment) {
+export async function editComment(id, content) {
   const data = await axios.put(
     `https://linked-posts.routemisr.com/comments/${id}`,
-    comment,
+    { content },
     {
       headers: {
         token: localStorage.getItem("userToken"),
