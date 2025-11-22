@@ -12,12 +12,14 @@ import CreatePostModal from "../../pages/CreatePostModal";
 import { useState } from "react";
 import { DeletePost } from "../../services/postServices";
 import { useQueryClient } from "@tanstack/react-query";
+import { Link, useNavigate } from "react-router-dom";
 
 function PostHeader({ post, photo, name, date, PostUserId }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { userData } = useContext(authContext);
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   async function deleteUserPost(postId) {
     setIsLoading(true);
@@ -35,14 +37,29 @@ function PostHeader({ post, photo, name, date, PostUserId }) {
   return (
     <>
       <div className="flex items-center justify-between p-4">
-        <div className="flex items-center gap-3">
+        <div
+          className="flex items-center gap-3"
+          onClick={() => navigate(`/user-profile/${PostUserId}/posts`)}
+        >
           <img
+            as
+            link
             src={photo}
             alt={name}
-            className="w-12 h-12 rounded-full object-cover"
+            className={`w-12 h-12 rounded-full object-cover not ${
+              userData._id == PostUserId
+                ? "cursor-pointer  "
+                : "pointer-events-none"
+            }`}
           />
           <div>
-            <h3 className="font-semibold text-gray-900">{name}</h3>
+            <h3
+              className={`font-semibold text-gray-900 cursor-pointer ${
+                userData._id == PostUserId ? "cursor-pointer" : ""
+              }`}
+            >
+              {name}
+            </h3>
             <p className="text-sm text-gray-500">
               {new Date(date).toLocaleString("en-us", {
                 dateStyle: "long",

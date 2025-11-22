@@ -2,7 +2,15 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { BiMessageRounded, BiShareAlt } from "react-icons/bi";
 import { Link } from "react-router-dom";
 
-function PostBody({ post, body, image, fromDetails, id }) {
+function PostBody({
+  post,
+  body,
+  postComments,
+  image,
+  fromDetails,
+  id,
+  refetch,
+}) {
   return (
     <>
       <div className="px-4 pb-3">
@@ -33,7 +41,7 @@ function PostBody({ post, body, image, fromDetails, id }) {
           className="flex items-center gap-2 text-gray-600 hover:text-blue-500 transition-colors"
         >
           <BiMessageRounded className="w-6 h-6" />
-          <span className="font-medium">{post.comments?.length || 0}</span>
+          <span className="font-medium">{postComments?.length || 0}</span>
         </Link>
         <button className="flex items-center gap-2 text-gray-600 hover:text-green-500 transition-colors">
           <BiShareAlt className="w-6 h-6" />

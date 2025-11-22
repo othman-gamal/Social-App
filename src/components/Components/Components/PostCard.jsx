@@ -24,7 +24,7 @@ export default function PostCard({ post }) {
         id={postId}
         body={post.body}
         image={post.image}
-        setPostComments={setPostComments}
+        postComments={postComments}
       />
       <CommentInput
         post={post}

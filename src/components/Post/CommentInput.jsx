@@ -8,7 +8,15 @@ import { FiSend } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { CreateComment } from "../../services/commentsServices";
 
-function CommentInput({ post, body, image, fromDetails, id, setPostComments }) {
+function CommentInput({
+  post,
+  body,
+  image,
+  fromDetails,
+  id,
+  setPostComments,
+  refetch,
+}) {
   const [commentMsg, setCommentnsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -20,7 +28,11 @@ function CommentInput({ post, body, image, fromDetails, id, setPostComments }) {
       // setPostComments(data.comments);
       // if (setPostComments) setPostComments(data.comments);
       console.log(data.data.comments);
-      setPostComments(data.data.comments);
+      if (setPostComments) {
+        setPostComments(data.data.comments); // NewsFeed
+      } else if (refetch) {
+        await refetch(); // PostDetails
+      }
     } catch (error) {
       console.log(error);
     }

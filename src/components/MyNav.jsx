@@ -16,7 +16,7 @@ import {
 import { RiMessage2Fill } from "react-icons/ri";
 import { IoIosNotifications } from "react-icons/io";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Navlogo from "../../src/assets/logo.png";
 
@@ -28,6 +28,8 @@ import { userContext } from "../context/UserContext";
 export default function MyNav() {
   const { token, setToken, userData, isLoading } = useContext(authContext);
   // const { userData } = useContext(userContext);
+  const navigate = useNavigate();
+  // const id = userData._
 
   function logoutUser() {
     localStorage.removeItem("userToken");
@@ -36,7 +38,7 @@ export default function MyNav() {
   return (
     <Navbar isBordered maxWidth="full" className="px-16">
       <NavbarContent justify="start">
-        <Link to={"/home"}>
+        <Link to={"/"}>
           <NavbarBrand className="mr-4">
             <img src={Navlogo} width={40} alt="logo" />
             <span className="font-bold ms-5">NEXIFY</span>
@@ -91,7 +93,11 @@ export default function MyNav() {
             )}
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="h-14 gap-2">
+            <DropdownItem
+              key="profile"
+              className="h-14 gap-2"
+              onClick={() => navigate(`/user-profile/${userData?._id}/posts`)}
+            >
               <p className="font-semibold">Signed in as</p>
               <p className="font-semibold">{userData.email}</p>
             </DropdownItem>

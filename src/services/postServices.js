@@ -28,12 +28,15 @@ export async function getSinglePost(id) {
 
 //3 get user post
 
-export async function getUserPosts({ id }) {
-  const data = await axios.get(
-    `https://linked-posts.routemisr.com/users/profile-data`,
+export async function getUserPosts(id) {
+  const { data } = await axios.get(
+    `https://linked-posts.routemisr.com/users/${id}/posts`,
     {
       headers: {
         token: localStorage.getItem("userToken"),
+      },
+      params: {
+        limit: 2,
       },
     }
   );

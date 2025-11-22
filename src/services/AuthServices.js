@@ -44,3 +44,40 @@ export async function getLoggedUserData() {
   );
   return data;
 }
+
+export async function uploadUserImage(FormData) {
+  try {
+    const response = await axios.put(
+      `https://linked-posts.routemisr.com/users/upload-photo`,
+      FormData,
+      {
+        headers: {
+          token: localStorage.getItem("userToken"),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Full axios error: ", error);
+    throw error;
+  }
+}
+
+export async function changePassword(body) {
+  try {
+    const response = await axios.patch(
+      `https://linked-posts.routemisr.com/users/change-password`,
+      body,
+      {
+        headers: {
+          token: localStorage.getItem("userToken"),
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Change password error:", error);
+    throw error;
+  }
+}

@@ -9,6 +9,8 @@ import ProtectedPath from "./ProtectedRoutes/ProtectedPath";
 import ProtectedAuth from "./ProtectedRoutes/ProtectedAuth";
 import PostDetails from "./pages/PostDetails";
 import CreatePostModal from "./pages/CreatePostModal";
+import UserProfile from "./pages/UserProfile";
+import StayTuned from "./pages/StayTuned";
 
 function App() {
   const router = createBrowserRouter([
@@ -35,6 +37,24 @@ function App() {
             <ProtectedPath>
               {" "}
               <PostDetails />
+            </ProtectedPath>
+          ),
+        },
+        {
+          path: "/user-profile/:id/posts",
+          element: (
+            <ProtectedPath>
+              {" "}
+              <UserProfile />
+            </ProtectedPath>
+          ),
+        },
+        {
+          path: "/V2",
+          element: (
+            <ProtectedPath>
+              {" "}
+              <StayTuned />
             </ProtectedPath>
           ),
         },
