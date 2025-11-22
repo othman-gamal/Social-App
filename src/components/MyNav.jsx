@@ -101,7 +101,12 @@ export default function MyNav() {
               <p className="font-semibold">Signed in as</p>
               <p className="font-semibold">{userData.email}</p>
             </DropdownItem>
-            <DropdownItem key="settings">My Profile</DropdownItem>
+            <DropdownItem
+              key="settings"
+              onClick={() => navigate(`/user-profile/${userData?._id}/posts`)}
+            >
+              My Profile
+            </DropdownItem>
             <DropdownItem
               key="logout"
               color="danger"
